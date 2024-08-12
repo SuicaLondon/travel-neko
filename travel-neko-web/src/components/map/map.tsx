@@ -29,7 +29,6 @@ const MapComponent = () => {
       version: "quarterly",
     })
   );
-  const mapRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedPlace, setSelectedPlace] =
