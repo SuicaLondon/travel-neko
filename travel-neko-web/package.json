@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@googlemaps/extended-component-library": "^0.6.11",
     "@googlemaps/js-api-loader": "^1.16.8",
+    "@react-google-maps/api": "^2.19.3",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18"
