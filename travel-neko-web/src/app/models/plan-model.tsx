@@ -1,25 +1,33 @@
-const PlanSectionTypes = {
+export const MapTypes = {
+  google: "google",
+  apple: "apple",
+};
+type MapTypesKey = (typeof MapTypes)[keyof typeof MapTypes];
+
+export const PlanSectionTypes = {
   hotel: "hotel",
   restaurant: "restaurant",
   attraction: "attraction",
 } as const;
 
-type PlanSectionTypesKey =
+export type PlanSectionTypesKey =
   (typeof PlanSectionTypes)[keyof typeof PlanSectionTypes];
-interface TravelPlan {
+
+export interface TravelPlan {
   id: string;
   title: string;
   coverImage: string;
+  map: MapTypesKey;
   plansOnDay: PlansOnDay[];
 }
 
-interface PlansOnDay {
+export interface PlansOnDay {
   id: string;
   numOfDay: number;
   locations: string[];
 }
 
-interface PlanSection {
+export interface PlanSection {
   id: string;
   type: keyof PlanSectionTypesKey;
   name: string;
