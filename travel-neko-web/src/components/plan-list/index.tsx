@@ -3,6 +3,7 @@ import { useTravelPlansStore } from "@/stores/plan.store";
 import React, { useCallback, useState } from "react";
 import { AddButton } from "../button/add-button";
 import { Modal } from "../modal";
+import { AddTravelPlanModal } from "@/module/add-travel-plan-modal";
 
 export function PlanList() {
   const [isOpened, setIsOpened] = useState(false);
@@ -21,11 +22,7 @@ export function PlanList() {
         return <div key={travelPlan.id}>{travelPlan.title}</div>;
       })}
       <AddButton onClick={onAddButtonClick} />
-      <Modal isOpened={isOpened} onClose={onModalClose}>
-        <Modal.Header title="Hello" onClose={onModalClose} />
-        <Modal.Body>Hello</Modal.Body>
-        <Modal.Footer onConfirm={onModalClose} onClose={onModalClose} />
-      </Modal>
+      <AddTravelPlanModal isOpened={isOpened} onModalClose={onModalClose} />
     </div>
   );
 }
