@@ -23,7 +23,13 @@ export const FormImageField = memo(({ name, error }: FormImageFieldProps) => {
   const nameString = name.toString();
 
   if (!!result && result instanceof FileList && result.length > 0) {
-    return <img src={URL.createObjectURL(result[0])} alt="Uploaded Image" />;
+    return (
+      <img
+        className="flex w-full items-center justify-center"
+        src={URL.createObjectURL(result[0])}
+        alt="Uploaded Image"
+      />
+    );
   }
   return (
     <div className="flex w-full items-center justify-center">
