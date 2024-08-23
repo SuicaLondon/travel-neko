@@ -16,8 +16,8 @@ export type PlanSectionTypesKey =
 export interface TravelPlan {
   id: string;
   title: string;
-  coverImage: string;
-  map: MapTypesKey;
+  coverImage?: File;
+  mapType: MapTypesKey;
   plansOnDay: PlansOnDay[];
 }
 

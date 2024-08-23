@@ -5,8 +5,9 @@ import {
 import { MapTypes } from "@/app/models/plan-model";
 import { Form } from "@/components/form";
 import { Modal } from "@/components/modal";
+import { useTravelPlansStore } from "@/stores/plan.store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useWatch } from "react-hook-form";
+import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
 type AddTravelPlanModalProps = {
@@ -26,7 +27,7 @@ const AddTravelPlanSchema = z.object({
     .refine((files) => files?.length === 0 || files!.length > 0, {
       message: "File is required if you upload one.",
     })
-    .transform((files) => (files && files.length > 0 ? files[0] : null))
+    .transform((files) => (files && files.length > 0 ? files[0] : undefined))
     .refine((file) => !file || file.size <= MAX_FILE_SIZE, {
       message: "Max image size is 5MB.",
     })
@@ -50,11 +51,19 @@ export function AddTravelPlanModal({
   });
   const {
     handleSubmit,
+    reset,
     formState: { errors },
   } = methods;
+  const addPlan = useTravelPlansStore((state) => state.addPlan);
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<AddTravelPlanType> = (data) => {
+    addPlan({
+      title: data.title,
+      coverImage: data.coverImage,
+      mapType: data.mapType,
+    });
+    reset();
+    onModalClose();
   };
 
   return (
