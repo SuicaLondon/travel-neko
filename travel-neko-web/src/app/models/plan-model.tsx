@@ -13,21 +13,21 @@ export const PlanSectionTypes = {
 export type PlanSectionTypesKey =
   (typeof PlanSectionTypes)[keyof typeof PlanSectionTypes];
 
-export interface TravelPlan {
+export interface ITravelPlan {
   id: string;
   title: string;
   coverImage?: File;
   mapType: MapTypesKey;
-  plansOnDay: PlansOnDay[];
+  plansOnDay: IPlansOnDay[];
 }
 
-export interface PlansOnDay {
+export interface IPlansOnDay {
   id: string;
   numOfDay: number;
   locations: string[];
 }
 
-export interface PlanSection {
+export interface IPlanSection {
   id: string;
   type: keyof PlanSectionTypesKey;
   name: string;

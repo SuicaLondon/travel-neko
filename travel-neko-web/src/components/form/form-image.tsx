@@ -9,7 +9,7 @@ import {
 } from "react-hook-form";
 import { FormError } from "./form-error";
 
-interface FormImageFieldProps<
+interface IFormImageFieldProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends Path<TFieldValues> = Path<TFieldValues>,
 > {
@@ -17,7 +17,7 @@ interface FormImageFieldProps<
   error?: FieldError;
 }
 
-export const FormImageField = memo(({ name, error }: FormImageFieldProps) => {
+export const FormImageField = memo(({ name, error }: IFormImageFieldProps) => {
   const { register, control } = useFormContext();
   const result = useWatch({ control, name });
   const nameString = name.toString();

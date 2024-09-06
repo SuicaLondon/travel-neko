@@ -1,23 +1,23 @@
 "use client";
-import { TravelPlan } from "@/app/models/plan-model";
+import { ITravelPlan } from "@/app/models/plan-model";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { v4 as uuidV4 } from "uuid";
 import { LOCAL_ID_PREFIX } from "@/app/constants/storage-constants";
 
-interface TravelPlanProps {}
-
-interface TravelPlanState {
-  modifyingPlan: Partial<TravelPlan> | null;
-  travelPlans: TravelPlan[];
-  addPlan: (plan: Pick<TravelPlan, "title" | "coverImage" | "mapType">) => void;
-  updatePlan: (plan: TravelPlan) => void;
+interface ITravelPlanState {
+  modifyingPlan: Partial<ITravelPlan> | null;
+  travelPlans: ITravelPlan[];
+  addPlan: (
+    plan: Pick<ITravelPlan, "title" | "coverImage" | "mapType">,
+  ) => void;
+  updatePlan: (plan: ITravelPlan) => void;
 }
 
-export const useTravelPlansStore = create<TravelPlanState>((set) => ({
+export const useTravelPlansStore = create<ITravelPlanState>((set) => ({
   modifyingPlan: null,
   travelPlans: [],
-  addPlan: (plan: Pick<TravelPlan, "title" | "coverImage" | "mapType">) => {
+  addPlan: (plan: Pick<ITravelPlan, "title" | "coverImage" | "mapType">) => {
     const newPlan = {
       ...plan,
       id: LOCAL_ID_PREFIX + uuidV4(),
@@ -28,7 +28,7 @@ export const useTravelPlansStore = create<TravelPlanState>((set) => ({
       travelPlans: [...state.travelPlans, newPlan],
     }));
   },
-  updatePlan: (plan: TravelPlan) => {
+  updatePlan: (plan: ITravelPlan) => {
     set((state) => ({
       modifyingPlan: null,
       travelPlans: state.travelPlans.map((travelPlan) =>
