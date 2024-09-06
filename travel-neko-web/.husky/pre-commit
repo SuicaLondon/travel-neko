@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd travel-neko-web
+pnpm lint-staged
