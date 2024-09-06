@@ -7,12 +7,16 @@ import { FormImageField } from "./form-image";
 import { FormRadio } from "./form-radio";
 import { FormRadioGroup } from "./form-radio-group";
 
-interface FormContainerProps {
+interface IFormContainerProps {
   methods: UseFormReturn<any, any, undefined>;
   children: ReactNode;
   onSubmit: () => void;
 }
-const FormContainer = ({ children, onSubmit, methods }: FormContainerProps) => {
+const FormContainer = ({
+  children,
+  onSubmit,
+  methods,
+}: IFormContainerProps) => {
   return (
     <FormProvider {...methods}>
       <form className="flex max-w-xl flex-col space-y-2" onSubmit={onSubmit}>

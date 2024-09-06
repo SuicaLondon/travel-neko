@@ -2,7 +2,7 @@ import { HTMLInputTypeAttribute, memo } from "react";
 import { FieldError, FieldValues, Path, useFormContext } from "react-hook-form";
 import { FormError } from "./form-error";
 
-interface FormFileFieldProps<
+interface IFormFileFieldProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends Path<TFieldValues> = Path<TFieldValues>,
 > {
@@ -17,7 +17,7 @@ export const FormFileField = memo(
     label,
     name,
     error,
-  }: FormFileFieldProps<Schema>) => {
+  }: IFormFileFieldProps<Schema>) => {
     const { register } = useFormContext();
     const nameString = name.toString();
     return (

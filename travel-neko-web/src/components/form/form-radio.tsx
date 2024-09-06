@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { FieldError, FieldValues, Path, useFormContext } from "react-hook-form";
 
-interface FormRadioProps<
+interface IFormRadioProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends Path<TFieldValues> = Path<TFieldValues>,
 > {
@@ -14,7 +14,7 @@ interface FormRadioProps<
 }
 
 export const FormRadio = memo(
-  ({ label, name, value, checked }: FormRadioProps) => {
+  ({ label, name, value, checked }: IFormRadioProps) => {
     const { register } = useFormContext();
     const nameString = name.toString();
     return (
