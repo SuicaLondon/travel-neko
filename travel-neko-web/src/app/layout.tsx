@@ -1,7 +1,8 @@
+import { Sidebar } from "@/components/sidebar";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Sidebar } from "@/components/sidebar";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <Toaster />
         <Sidebar.Button />
         <Sidebar>
           <Sidebar.Items>
@@ -25,7 +27,7 @@ export default function RootLayout({
               href="/plans"
               icon={
                 <svg
-                  className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                  className="h-5 w-5 flex-shrink-0 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -40,7 +42,7 @@ export default function RootLayout({
             </Sidebar.Item>
           </Sidebar.Items>
         </Sidebar>
-        <div className="p-4 sm:ml-64 min-h-screen">{children}</div>
+        <div className="min-h-screen p-4 sm:ml-64">{children}</div>
       </body>
     </html>
   );

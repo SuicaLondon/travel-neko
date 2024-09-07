@@ -1,8 +1,7 @@
+import { MapComponent } from "@/components/map";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Sidebar } from "@/components/sidebar";
-import { MapComponent } from "@/components/map";
 
 const inter = Inter({ subsets: ["latin"] });
 

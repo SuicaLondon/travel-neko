@@ -1,5 +1,4 @@
-import { error } from "console";
-import React, { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import {
   FieldError,
   FieldValues,
@@ -18,15 +17,27 @@ interface IFormImageFieldProps<
 }
 
 export const FormImageField = memo(({ name, error }: IFormImageFieldProps) => {
-  const { register, control } = useFormContext();
+  const [preview, setPreview] = useState<File | null>(null);
+  const { register, control, trigger, getValues, resetField } =
+    useFormContext();
   const result = useWatch({ control, name });
   const nameString = name.toString();
 
-  if (!!result && result instanceof FileList && result.length > 0) {
+  useEffect(() => {
+    if (result) {
+      trigger(name).then((validated) => {
+        if (validated) {
+          setPreview(result[0]);
+        }
+      });
+    }
+  }, [getValues, name, preview, resetField, result, trigger]);
+
+  if (preview) {
     return (
       <img
         className="flex w-full items-center justify-center"
-        src={URL.createObjectURL(result[0])}
+        src={URL.createObjectURL(preview)}
         alt="Uploaded Image"
       />
     );
