@@ -1,8 +1,9 @@
 import { Sidebar } from "@/components/sidebar";
+import { PlanStoreProvider } from "@/stores/plan-store-provider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import { Toaster } from "sonner";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -42,7 +43,9 @@ export default function RootLayout({
             </Sidebar.Item>
           </Sidebar.Items>
         </Sidebar>
-        <div className="min-h-screen p-4 sm:ml-64">{children}</div>
+        <div className="min-h-screen p-4 sm:ml-64">
+          <PlanStoreProvider>{children}</PlanStoreProvider>
+        </div>
       </body>
     </html>
   );
