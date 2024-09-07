@@ -1,6 +1,6 @@
 "use client";
 import { LOCAL_ID_PREFIX } from "@/app/constants/storage-constants";
-import { ITravelPlan } from "@/app/models/plan-model";
+import { type ITravelPlan } from "@/app/models/plan-model";
 import { v4 as uuidV4 } from "uuid";
 import { create } from "zustand";
 

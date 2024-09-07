@@ -5,9 +5,11 @@ import {
 import { MapTypes } from "@/app/models/plan-model";
 import { Form } from "@/components/form";
 import { Modal } from "@/components/modal";
+import { useErrorToast } from "@/hooks/use-error-toast";
+import { useUnmount } from "@/hooks/use-unmount";
 import { useTravelPlansStore } from "@/stores/plan.store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm, useWatch } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
 type AddTravelPlanModalProps = {
@@ -20,12 +22,9 @@ const AddTravelPlanSchema = z.object({
   mapType: z.nativeEnum(MapTypes),
   coverImage: z
     .unknown()
-    .transform((value) => {
-      return value as FileList;
-    })
-    .optional()
-    .refine((files) => files?.length === 0 || files!.length > 0, {
-      message: "File is required if you upload one.",
+    .transform((value) => value as FileList)
+    .refine((files) => files !== undefined && files.length > 0, {
+      message: "File is required",
     })
     .transform((files) => (files && files.length > 0 ? files[0] : undefined))
     .refine((file) => !file || file.size <= MAX_FILE_SIZE, {
@@ -55,6 +54,13 @@ export function AddTravelPlanModal({
     formState: { errors },
   } = methods;
   const addPlan = useTravelPlansStore((state) => state.addPlan);
+  useErrorToast(errors);
+  useUnmount(reset);
+
+  const onClose = () => {
+    reset();
+    onModalClose();
+  };
 
   const onSubmit: SubmitHandler<AddTravelPlanType> = (data) => {
     addPlan({
@@ -67,8 +73,8 @@ export function AddTravelPlanModal({
   };
 
   return (
-    <Modal isOpened={isOpened} onClose={onModalClose}>
-      <Modal.Header title="Hello" onClose={onModalClose} />
+    <Modal isOpened={isOpened} onClose={onClose}>
+      <Modal.Header title="Hello" onClose={onClose} />
 
       <Form methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Modal.Body>
@@ -92,7 +98,7 @@ export function AddTravelPlanModal({
             error={errors["coverImage"]}
           />
         </Modal.Body>
-        <Modal.Footer onSubmit={onModalClose} onClose={onModalClose} />
+        <Modal.Footer onSubmit={onClose} onClose={onClose} />
       </Form>
     </Modal>
   );
