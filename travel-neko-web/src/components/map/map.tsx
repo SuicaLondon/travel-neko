@@ -27,7 +27,7 @@ const MapComponent = () => {
     new Loader({
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API as string,
       version: "quarterly",
-    })
+    }),
   );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -84,7 +84,7 @@ const MapComponent = () => {
 
     if (places.length > 0) {
       const { LatLngBounds } = (await google.maps.importLibrary(
-        "core"
+        "core",
       )) as google.maps.CoreLibrary;
       const bounds = new LatLngBounds();
 
@@ -123,7 +123,7 @@ const MapComponent = () => {
       {error && <div className={mapFrameClassNames}>{error}</div>}
       <div className={mapFrameClassNames} ref={ref} id="map" />
       {selectedPlace && (
-        <div className="fixed left-4 bottom-4 max-h-96 overflow-auto bg-white rounded-md shadow">
+        <div className="fixed bottom-4 left-4 max-h-96 overflow-auto rounded-md bg-white shadow">
           <h1>{selectedPlace.id}</h1>
           <p>{selectedPlace.displayName}</p>
           <p>{selectedPlace.formattedAddress}</p>
@@ -132,7 +132,7 @@ const MapComponent = () => {
             const author = photo.authorAttributions;
             return (
               <div key={uri}>
-                <img src={uri} alt="" width={400} height={400} />
+                <img src={uri} alt="Author" width={400} height={400} />
                 <p>{author[0].displayName}</p>
               </div>
             );

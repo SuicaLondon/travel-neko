@@ -1,16 +1,18 @@
 import { MouseEventHandler } from "react";
 
 type AddButtonProps = {
+  label?: string;
   onClick: MouseEventHandler<HTMLButtonElement>;
 };
 
-export function AddButton({ onClick }: AddButtonProps) {
+export function AddButton({ label, onClick }: AddButtonProps) {
   return (
     <button
       onClick={onClick}
-      className="px-8 py-4 border rounded-lg select-none"
+      className="select-none space-x-2 rounded-lg border px-8 py-4"
     >
-      +
+      <span>+</span>
+      {label && <span>{label}</span>}
     </button>
   );
 }

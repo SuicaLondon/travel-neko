@@ -46,11 +46,14 @@ export const planStore = createStore(
       },
       accessPlan: (planId: string) => {
         const plan =
-          get().travelPlans.find((plan) => plan.id === planId) ?? null;
+          get().travelPlans.find((plan) => {
+            console.log(plan.id, planId, plan.id === planId);
+            return plan.id === planId;
+          }) ?? null;
         const modifyingPlan = structuredClone(plan);
         set((state) => ({
           ...state,
-          modifyingPlan: structuredClone(plan),
+          modifyingPlan: modifyingPlan,
         }));
         return [plan, modifyingPlan];
       },
@@ -83,6 +86,5 @@ export const useTravelPlansStore = <T>(
   selector: (state: ITravelPlanState) => T,
 ) => {
   const store = useContext(PlanStoreContext);
-  console.log(store);
   return useStore(store, selector);
 };

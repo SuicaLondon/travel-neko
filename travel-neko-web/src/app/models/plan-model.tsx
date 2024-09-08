@@ -24,7 +24,7 @@ export interface ITravelPlan {
 export interface IPlansOnDay {
   id: string;
   numOfDay: number;
-  locations: string[];
+  locations: IPlanSection[];
 }
 
 export interface IPlanSection {
