@@ -17,8 +17,6 @@ export default function PlanDetail({ planId }: PlanDetailProps) {
   );
 
   if (!travelPlan) {
-    console.log(travelPlan);
-    alert(travelPlan);
     redirect("/plans");
   }
 

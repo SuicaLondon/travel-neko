@@ -36,3 +36,8 @@ export interface IPlanSection {
   time: string;
   shouldBook?: boolean;
 }
+
+export type AddTravelPlanModel = Pick<
+  ITravelPlan,
+  "title" | "coverImage" | "mapType"
+>;

@@ -1,15 +1,18 @@
+import { addPlan } from "@/clients/plan";
+import { Form } from "@/components/form";
+import { Modal } from "@/components/modal";
 import {
   ACCEPTED_IMAGE_TYPES,
   MAX_FILE_SIZE,
-} from "@/app/constants/file-constants";
-import { MapTypes } from "@/app/models/plan-model";
-import { Form } from "@/components/form";
-import { Modal } from "@/components/modal";
+} from "@/constants/file-constants";
+import { useAddPlanQuery } from "@/hooks/use-add-plan-query";
 import { useErrorToast } from "@/hooks/use-error-toast";
 import { useUnmount } from "@/hooks/use-unmount";
+import { MapTypes } from "@/models/plan-model";
 import { useTravelPlansStore } from "@/stores/plan.store";
 import { getBase64 } from "@/utils/file-utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -54,7 +57,15 @@ export function AddTravelPlanModal({
     reset,
     formState: { errors },
   } = methods;
-  const addPlan = useTravelPlansStore((state) => state.addPlan);
+  const queryClient = useQueryClient();
+
+  const { mutate: addPlan, isPending } = useAddPlanQuery({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["fetch-plans"] });
+      reset();
+      onModalClose();
+    },
+  });
   useErrorToast(errors);
   useUnmount(reset);
 
@@ -66,13 +77,11 @@ export function AddTravelPlanModal({
   const onSubmit: SubmitHandler<AddTravelPlanType> = async (data) => {
     if (!data.coverImage) return;
     const coverImage = await getBase64(data.coverImage);
-    addPlan({
+    await addPlan({
       title: data.title,
       coverImage: coverImage,
       mapType: data.mapType,
     });
-    reset();
-    onModalClose();
   };
 
   return (

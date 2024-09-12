@@ -1,6 +1,9 @@
 "use client";
-import { LOCAL_ID_PREFIX } from "@/app/constants/storage-constants";
-import { type ITravelPlan } from "@/app/models/plan-model";
+import {
+  LOCAL_DAY_ID_PREFIX,
+  LOCAL_PLAN_ID_PREFIX,
+} from "@/constants/storage-constants";
+import { type ITravelPlan } from "@/models/plan-model";
 import { createContext, useContext } from "react";
 import { v4 as uuidV4 } from "uuid";
 import { createStore, useStore } from "zustand";
@@ -28,7 +31,7 @@ export const planStore = createStore(
       ) => {
         const newPlan = {
           ...plan,
-          id: LOCAL_ID_PREFIX + uuidV4(),
+          id: LOCAL_PLAN_ID_PREFIX + uuidV4(),
           plansOnDay: [],
         };
         set((state) => ({
@@ -56,6 +59,22 @@ export const planStore = createStore(
           modifyingPlan: modifyingPlan,
         }));
         return [plan, modifyingPlan];
+      },
+      addDayOnPlan: () => {
+        set((state) => ({
+          ...state,
+          modifyingPlan: {
+            ...state.modifyingPlan,
+            plansOnDay: [
+              ...(state.modifyingPlan?.plansOnDay ?? []),
+              {
+                id: LOCAL_DAY_ID_PREFIX + uuidV4(),
+                numOfDay: 0,
+                locations: [],
+              },
+            ],
+          },
+        }));
       },
     }),
     {
