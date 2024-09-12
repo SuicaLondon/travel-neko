@@ -1,13 +1,13 @@
 import { ITravelPlan } from "@/models/plan-model";
-import { planList } from "../plans";
 import { Responses } from "@/utils/responses";
+import { planManager } from "../plans";
 
 export async function GET(
   request: Request,
   { params }: { params: { planId: string } },
 ) {
   const { planId } = params;
-  const plan = planList.find((plan) => plan.id === planId);
+  const plan = planManager.getPlan(planId);
   if (plan) {
     return Responses.code200({ plan });
   } else {
@@ -21,13 +21,10 @@ export async function PUT(
 ) {
   const { planId } = params;
   try {
-    const updatedPlan: ITravelPlan = await request.json();
-    const index = planList.findIndex((plan) => plan.id === planId);
-    if (index !== -1) {
-      planList[index] = {
-        ...planList[index],
-        ...updatedPlan,
-      };
+    const newPlan: ITravelPlan = await request.json();
+
+    const updatedPlan = planManager.updatePlan(newPlan, planId);
+    if (updatedPlan) {
       return Responses.code202("Updated success");
     } else {
       return Responses.code404("Record not found");
@@ -42,9 +39,8 @@ export async function DELETE(
   { params }: { params: { planId: string } },
 ) {
   const { planId } = params;
-  const index = planList.findIndex((plan) => plan.id === planId);
-  if (index !== -1) {
-    planList.splice(index, 1);
+  const removedPlan = planManager.deletePlan(planId);
+  if (removedPlan) {
     return Responses.code200({ message: "Deleted success" });
   } else {
     return Responses.code404("Record not found");
