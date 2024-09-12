@@ -1,12 +1,13 @@
 "use client";
+import { useFetchPlanListQuery } from "@/hooks/use-fetch-plan-list-query";
 import { AddTravelPlanModal } from "@/module/add-travel-plan-modal";
-import { useTravelPlansStore } from "@/stores/plan.store";
+import Link from "next/link";
 import { useCallback, useState } from "react";
 import { AddButton } from "../button/add-button";
 
 export function PlanList() {
+  const { data: planList, error, isLoading } = useFetchPlanListQuery();
   const [isOpened, setIsOpened] = useState(false);
-  const travelPlans = useTravelPlansStore((state) => state.travelPlans);
 
   const onAddButtonClick = useCallback(() => {
     setIsOpened(true);
@@ -15,23 +16,33 @@ export function PlanList() {
     setIsOpened(false);
   }, []);
 
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
+
   return (
     <div>
-      {travelPlans.map((travelPlan) => {
+      {planList?.map((plan) => {
         return (
-          <div className="w-full max-w-80" key={travelPlan.id}>
-            <h1 className="text-4xl font-bold">{travelPlan.title}</h1>
-            {travelPlan.coverImage && (
-              <img
-                className="flex w-full items-center justify-center"
-                src={URL.createObjectURL(travelPlan.coverImage)}
-                alt="Uploaded Image"
-              />
-            )}
-          </div>
+          <Link
+            key={plan.id}
+            href={`/plans/${plan.id}`}
+            className="cursor-pointer"
+          >
+            <div className="w-full max-w-96">
+              <h1 className="text-4xl font-bold">{plan.title}</h1>
+              {plan.coverImage && (
+                <img
+                  className="flex w-full items-center justify-center"
+                  src={plan.coverImage}
+                  alt="Uploaded Image"
+                />
+              )}
+            </div>
+          </Link>
         );
       })}
-      <AddButton onClick={onAddButtonClick} />
+      <AddButton label="Add Plan" onClick={onAddButtonClick} />
       <AddTravelPlanModal isOpened={isOpened} onModalClose={onModalClose} />
     </div>
   );

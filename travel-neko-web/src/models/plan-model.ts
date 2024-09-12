@@ -24,7 +24,7 @@ export interface ITravelPlan {
 export interface IPlansOnDay {
   id: string;
   numOfDay: number;
-  locations: string[];
+  locations: IPlanSection[];
 }
 
 export interface IPlanSection {
@@ -36,3 +36,8 @@ export interface IPlanSection {
   time: string;
   shouldBook?: boolean;
 }
+
+export type AddTravelPlanModel = Pick<
+  ITravelPlan,
+  "title" | "coverImage" | "mapType"
+>;
