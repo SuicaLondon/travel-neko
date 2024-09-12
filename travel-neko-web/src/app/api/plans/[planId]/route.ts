@@ -1,57 +1,52 @@
+import { ITravelPlan } from "@/models/plan-model";
 import { planList } from "../plans";
+import { Responses } from "@/utils/responses";
 
-export async function GET(request: Request) {
-  const url = new URL(request.url);
-  const idParameter = url.searchParams.get("id");
-
-  if (idParameter !== null) {
-    const id = decodeURIComponent(idParameter);
-    const plan = planList.find((plan) => plan.id === id);
-    if (plan) {
-      return new Response(JSON.stringify(plan), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        status: 200,
-      });
-    } else {
-      return new Response(JSON.stringify({ message: "Plan not found" }), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        status: 404,
-      });
-    }
+export async function GET(
+  request: Request,
+  { params }: { params: { planId: string } },
+) {
+  const { planId } = params;
+  const plan = planList.find((plan) => plan.id === planId);
+  if (plan) {
+    return Responses.code200({ plan });
+  } else {
+    return Responses.code404("Record not found");
   }
 }
 
-export async function DELETE(request: Request) {
-  const url = new URL(request.url);
-  const idParameter = url.searchParams.get("id");
-
-  if (idParameter !== null) {
-    const id = decodeURIComponent(idParameter);
-    const index = planList.findIndex((plan) => plan.id === id);
-    if (index >= 0) {
-      planList.toSpliced(index);
-      return new Response(
-        JSON.stringify({
-          message: "Deleted success",
-        }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          status: 200,
-        },
-      );
+export async function PUT(
+  request: Request,
+  { params }: { params: { planId: string } },
+) {
+  const { planId } = params;
+  try {
+    const updatedPlan: ITravelPlan = await request.json();
+    const index = planList.findIndex((plan) => plan.id === planId);
+    if (index !== -1) {
+      planList[index] = {
+        ...planList[index],
+        ...updatedPlan,
+      };
+      return Responses.code202("Updated success");
     } else {
-      return new Response(JSON.stringify({ message: "Plan not found" }), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        status: 404,
-      });
+      return Responses.code404("Record not found");
     }
+  } catch (error) {
+    return Responses.code403(error?.toString() ?? "Unknown Error");
+  }
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { planId: string } },
+) {
+  const { planId } = params;
+  const index = planList.findIndex((plan) => plan.id === planId);
+  if (index !== -1) {
+    planList.splice(index, 1);
+    return Responses.code200({ message: "Deleted success" });
+  } else {
+    return Responses.code404("Record not found");
   }
 }
