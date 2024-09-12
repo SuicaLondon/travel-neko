@@ -1,39 +1,66 @@
 "use client";
 import { AddButton } from "@/components/button/add-button";
+import { DeleteButton } from "@/components/button/delete-button";
 import { ConfirmModal } from "@/components/confirm-modal";
 import { PlanCover } from "@/components/plan-cover";
+import { useDeletePlanQuery } from "@/hooks/use-delete-plan-query";
 import { useFetchPlanQuery } from "@/hooks/use-fetch-plan-query";
-import { useTravelPlansStore } from "@/stores/plan.store";
-import { redirect } from "next/navigation";
-import React, { useEffect, useMemo, useState } from "react";
-
+import { useQueryClient } from "@tanstack/react-query";
+import { revalidatePath } from "next/cache";
+import { redirect, useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 type PlanDetailProps = {
   planId: string;
 };
 
 export default function PlanDetail({ planId }: PlanDetailProps) {
-  const { data: plan, isLoading } = useFetchPlanQuery(planId);
-  // const accessPlan = useTravelPlansStore((state) => state.accessPlan);
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const {
+    data: plan,
+    error,
+    isError: isFetchPlanError,
+    error: fetchPlanError,
+    isLoading,
+  } = useFetchPlanQuery(planId);
+  const {
+    mutate: deletePlan,
+    isPending: isDeletingPlan,
+    isError: isDeletePlanError,
+    error: deletePlanError,
+  } = useDeletePlanQuery({
+    onSuccess: () => {
+      setIsDeleteModalOpened(false);
+      queryClient.invalidateQueries({ queryKey: ["fetch-plans"] });
+      router.replace("/plans");
+    },
+  });
   const [isDeleteModalOpened, setIsDeleteModalOpened] = useState(false);
-  // const [travelPlan, modifyingPlan] = useMemo(
-  //   () => accessPlan(planId),
-  //   [accessPlan, planId],
-  // );
-
-  // if (!travelPlan) {
-  //   redirect("/plans");
-  // }
 
   const addDayOnPlan = () => {};
 
-  const deleteTravelPlan = () => {
+  const handleDeleteModalOpen = () => {
     setIsDeleteModalOpened(true);
   };
-
   const handleDeleteModalClose = () => {
     setIsDeleteModalOpened(false);
   };
-  console.log(plan, isLoading);
+
+  const handleDeletePlan = () => {
+    deletePlan(planId);
+  };
+
+  if (isFetchPlanError && fetchPlanError) {
+    toast.error(fetchPlanError?.message);
+    redirect("/plans");
+  }
+
+  if (isDeletePlanError && fetchPlanError) {
+    toast.error(deletePlanError?.message);
+    redirect("/plans");
+  }
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -66,11 +93,12 @@ export default function PlanDetail({ planId }: PlanDetailProps) {
         );
       })}
       <AddButton label="Add Day on Plan" onClick={() => {}} />
+      <DeleteButton label="Delete Plan" onClick={handleDeleteModalOpen} />
 
       <ConfirmModal
         isOpened={isDeleteModalOpened}
         onClose={handleDeleteModalClose}
-        onConfirm={deleteTravelPlan}
+        onConfirm={handleDeletePlan}
         title="Delete Travel Plan"
         content="Are you sure you want to delete this travel plan?"
       />

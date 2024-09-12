@@ -3,7 +3,7 @@ import {
   ITravelPlan,
   UpdateTravelPlanModel,
 } from "@/models/plan-model";
-
+import { v4 as uuidV4 } from "uuid";
 class PlanManager {
   private planList: ITravelPlan[];
 
@@ -47,6 +47,3 @@ class PlanManager {
 }
 
 export const planManager = new PlanManager();
-function uuidV4(): string {
-  throw new Error("Function not implemented.");
-}

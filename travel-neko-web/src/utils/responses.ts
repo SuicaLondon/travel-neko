@@ -12,7 +12,7 @@ export class Responses {
   static code400 = (message: string) =>
     this.messageResponseGenerator(message, 400);
   static code403 = (message: string) =>
-    this.messageResponseGenerator(message, 400);
+    this.messageResponseGenerator(message, 403);
   static code404 = (message: string) =>
     this.messageResponseGenerator(message, 404);
 

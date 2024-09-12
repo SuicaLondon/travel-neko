@@ -1,6 +1,7 @@
 import { ITravelPlan } from "@/models/plan-model";
 import { Responses } from "@/utils/responses";
 import { planManager } from "../plans";
+import { revalidatePath } from "next/cache";
 
 export async function GET(
   request: Request,
@@ -25,6 +26,7 @@ export async function PUT(
 
     const updatedPlan = planManager.updatePlan(newPlan, planId);
     if (updatedPlan) {
+      revalidatePath("/plans");
       return Responses.code202("Updated success");
     } else {
       return Responses.code404("Record not found");
@@ -41,6 +43,7 @@ export async function DELETE(
   const { planId } = params;
   const removedPlan = planManager.deletePlan(planId);
   if (removedPlan) {
+    revalidatePath("/plans");
     return Responses.code200({ message: "Deleted success" });
   } else {
     return Responses.code404("Record not found");

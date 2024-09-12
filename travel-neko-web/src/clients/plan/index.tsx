@@ -12,7 +12,7 @@ export const fetchPlanList = async () => {
 
 export const fetchPlan = async (planId: string) => {
   const response = await axios.get(`/api/plans/${planId}`);
-  return response.data as ITravelPlan;
+  return response.data.plan as ITravelPlan;
 };
 
 export const addPlan = async (plan: AddTravelPlanModel) => {
