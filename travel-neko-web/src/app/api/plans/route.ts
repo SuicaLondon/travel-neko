@@ -1,77 +1,24 @@
-import { AddTravelPlanModel, ITravelPlan } from "@/models/plan-model";
-import { v4 as uuidV4 } from "uuid";
-
-let planList: ITravelPlan[] = [];
+import { AddTravelPlanModel } from "@/models/plan-model";
+import { Responses } from "@/utils/responses";
+import { planManager } from "./plans";
+import { revalidatePath } from "next/cache";
 
 export async function GET() {
   try {
-    return new Response(JSON.stringify({ planList }), {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      status: 200,
-    });
+    const planList = planManager.getPlanList();
+    return Responses.code200({ planList });
   } catch (error) {
-    return new Response(JSON.stringify({ message: error }), {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      status: 403,
-    });
+    return Responses.code403(error?.toString() ?? "Unknown Error");
   }
 }
 
 export async function POST(request: Request) {
   try {
     const plan: AddTravelPlanModel = await request.json();
-    const newPlan: ITravelPlan = { ...plan, id: uuidV4(), plansOnDay: [] };
-    planList.push(newPlan);
-    return new Response(
-      JSON.stringify({
-        message: "Added success",
-      }),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        status: 201,
-      },
-    );
+    planManager.addPlan(plan);
+    revalidatePath("/plans");
+    return Responses.code201("Added success");
   } catch (error) {
-    return new Response(JSON.stringify({ message: error }), {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      status: 400,
-    });
-  }
-}
-
-export async function PUT(request: Request) {
-  try {
-    const updatedPlan: ITravelPlan = await request.json();
-    const index = planList.findIndex((plan) => plan.id === updatedPlan.id);
-    planList[index] = {
-      ...planList[index],
-      ...updatedPlan,
-    };
-    return new Response(
-      JSON.stringify({
-        message: "Updated success",
-      }),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        status: 201,
-      },
-    );
-  } catch (error) {
-    return new Response(JSON.stringify({ message: error }), {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      status: 400,
-    });
+    return Responses.code403(error?.toString() ?? "Unknown Error");
   }
 }

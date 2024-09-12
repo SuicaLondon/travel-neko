@@ -1,4 +1,3 @@
-import { addPlan } from "@/clients/plan";
 import { Form } from "@/components/form";
 import { Modal } from "@/components/modal";
 import {
@@ -6,10 +5,9 @@ import {
   MAX_FILE_SIZE,
 } from "@/constants/file-constants";
 import { useAddPlanQuery } from "@/hooks/use-add-plan-query";
-import { useErrorToast } from "@/hooks/use-error-toast";
+import { useFormErrorToast } from "@/hooks/use-form-error-toast";
 import { useUnmount } from "@/hooks/use-unmount";
 import { MapTypes } from "@/models/plan-model";
-import { useTravelPlansStore } from "@/stores/plan.store";
 import { getBase64 } from "@/utils/file-utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -66,7 +64,7 @@ export function AddTravelPlanModal({
       onModalClose();
     },
   });
-  useErrorToast(errors);
+  useFormErrorToast(errors);
   useUnmount(reset);
 
   const onClose = () => {

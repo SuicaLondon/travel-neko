@@ -41,3 +41,8 @@ export type AddTravelPlanModel = Pick<
   ITravelPlan,
   "title" | "coverImage" | "mapType"
 >;
+
+export type UpdateTravelPlanModel = Pick<
+  ITravelPlan,
+  "title" | "coverImage" | "mapType"
+>;
