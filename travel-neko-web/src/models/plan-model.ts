@@ -46,3 +46,6 @@ export type UpdateTravelPlanModel = Pick<
   ITravelPlan,
   "title" | "coverImage" | "mapType"
 >;
+
+export type AddDayOnPlanModel = Pick<IPlansOnDay, "numOfDay" | "locations">;
+export type UpdateDayOnPlanModel = Pick<IPlansOnDay, "numOfDay" | "locations">;

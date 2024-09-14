@@ -50,7 +50,6 @@ export const planStore = createStore(
       accessPlan: (planId: string) => {
         const plan =
           get().travelPlans.find((plan) => {
-            console.log(plan.id, planId, plan.id === planId);
             return plan.id === planId;
           }) ?? null;
         const modifyingPlan = structuredClone(plan);

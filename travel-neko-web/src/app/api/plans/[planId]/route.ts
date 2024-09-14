@@ -1,6 +1,6 @@
 import { ITravelPlan } from "@/models/plan-model";
 import { Responses } from "@/utils/responses";
-import { planManager } from "../plans";
+import { planManager } from "lib/models/plan-model";
 import { revalidatePath } from "next/cache";
 
 export async function GET(
