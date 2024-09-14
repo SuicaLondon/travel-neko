@@ -8,7 +8,7 @@ export async function GET(
   { params }: { params: { planId: string } },
 ) {
   const { planId } = params;
-  const plan = planManager.getPlan(planId);
+  const plan = await planManager.getPlan(planId);
   if (plan) {
     return Responses.code200({ plan });
   } else {
@@ -24,7 +24,7 @@ export async function PUT(
   try {
     const newPlan: ITravelPlan = await request.json();
 
-    const updatedPlan = planManager.updatePlan(newPlan, planId);
+    const updatedPlan = await planManager.updatePlan(newPlan, planId);
     if (updatedPlan) {
       revalidatePath("/plans");
       return Responses.code202("Updated success");
@@ -41,7 +41,7 @@ export async function DELETE(
   { params }: { params: { planId: string } },
 ) {
   const { planId } = params;
-  const removedPlan = planManager.deletePlan(planId);
+  const removedPlan = await planManager.deletePlan(planId);
   if (removedPlan) {
     revalidatePath("/plans");
     return Responses.code200({ message: "Deleted success" });

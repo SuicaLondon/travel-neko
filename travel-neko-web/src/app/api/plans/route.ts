@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 
 export async function GET() {
   try {
-    const planList = planManager.getPlanList();
+    const planList = await planManager.getPlanList();
     return Responses.code200({ planList });
   } catch (error) {
     return Responses.code403(error?.toString() ?? "Unknown Error");
@@ -15,7 +15,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const plan: AddTravelPlanModel = await request.json();
-    planManager.addPlan(plan);
+    await planManager.addPlan(plan);
     revalidatePath("/plans");
     return Responses.code201("Added success");
   } catch (error) {

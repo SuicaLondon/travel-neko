@@ -9,7 +9,7 @@ export async function POST(
 ) {
   const { planId } = params;
   const newDay: AddDayOnPlanModel = await request.json();
-  const updatedPlan = planManager.addDayOnPlan(planId, newDay);
+  const updatedPlan = await planManager.addDayOnPlan(planId, newDay);
   if (updatedPlan) {
     revalidatePath("/plans");
     revalidatePath(`/plans/${planId}`);

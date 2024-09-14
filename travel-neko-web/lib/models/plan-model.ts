@@ -1,94 +1,93 @@
 import {
   AddDayOnPlanModel,
   AddTravelPlanModel,
-  IPlansOnDay,
-  ITravelPlan,
   UpdateDayOnPlanModel,
   UpdateTravelPlanModel,
 } from "@/models/plan-model";
-import { v4 as uuidV4 } from "uuid";
+import prisma from "lib/prisma";
+
 class PlanManager {
-  private planList: ITravelPlan[];
-
-  constructor() {
-    this.planList = [];
+  async getPlanList() {
+    return await prisma.travelPlan.findMany({
+      include: {
+        plansOnDay: {
+          include: {
+            locations: true,
+          },
+        },
+      },
+    });
   }
 
-  getPlanList() {
-    return this.planList;
+  async getPlan(planId: string) {
+    return await prisma.travelPlan.findUnique({
+      where: { id: planId },
+      include: {
+        plansOnDay: {
+          include: {
+            locations: true,
+          },
+        },
+      },
+    });
   }
 
-  getPlan(planId: string) {
-    return this.planList.find((plan) => plan.id === planId);
+  async addPlan(plan: AddTravelPlanModel) {
+    return await prisma.travelPlan.create({
+      data: {
+        ...plan,
+        plansOnDay: {
+          create: [],
+        },
+      },
+    });
   }
 
-  addPlan(plan: AddTravelPlanModel) {
-    this.planList.push({ ...plan, id: uuidV4(), plansOnDay: [] });
+  async updatePlan(newPlan: UpdateTravelPlanModel, planId: string) {
+    return await prisma.travelPlan.update({
+      where: { id: planId },
+      data: newPlan,
+    });
   }
 
-  updatePlan(newPlan: UpdateTravelPlanModel, planId: string) {
-    const index = this.planList.findIndex((plan) => plan.id === planId);
-    if (index === -1) {
-      return null;
-    }
-    const updatedPlan = {
-      ...this.planList[index],
-      ...newPlan,
-    };
-    this.planList[index] = updatedPlan;
-    return updatedPlan;
+  async deletePlan(planId: string) {
+    return await prisma.travelPlan.delete({
+      where: { id: planId },
+    });
   }
 
-  deletePlan(planId: string) {
-    const index = this.planList.findIndex((plan) => plan.id === planId);
-    if (index === -1) {
-      return null;
-    }
-    const removedPlan = this.planList.splice(index, 1);
-    return removedPlan;
+  async addDayOnPlan(planId: string, day: AddDayOnPlanModel) {
+    return await prisma.plansOnDay.create({
+      data: {
+        ...day,
+        travelPlanId: planId,
+        locations: {
+          create: [],
+        },
+      },
+    });
   }
 
-  addDayOnPlan(planId: string, day: AddDayOnPlanModel) {
-    const index = this.planList.findIndex((plan) => plan.id === planId);
-    if (index === -1) {
-      return null;
-    }
-    const newDay = { id: uuidV4(), ...day };
-    this.planList[index].plansOnDay.push(newDay);
-    return newDay;
+  async updateDayOnPlan(
+    planId: string,
+    dayId: string,
+    day: UpdateDayOnPlanModel,
+  ) {
+    return await prisma.plansOnDay.update({
+      where: { id: dayId },
+      data: {
+        ...day,
+        locations: {
+          set: day.locations.map((location) => ({ id: location.id })),
+        },
+      },
+    });
   }
 
-  updateDayOnPlan(planId: string, dayId: string, day: UpdateDayOnPlanModel) {
-    const index = this.planList.findIndex((plan) => plan.id === planId);
-    if (index === -1) {
-      return null;
-    }
-    const dayIndex = this.planList[index].plansOnDay.findIndex(
-      (day) => day.id === dayId,
-    );
-    if (dayIndex === -1) {
-      return null;
-    }
-    this.planList[index].plansOnDay[dayIndex] = {
-      ...this.planList[index].plansOnDay[dayIndex],
-      ...day,
-    };
-    return this.planList[index].plansOnDay[dayIndex];
-  }
-
-  deleteDayOnPlan(planId: string, dayId: string) {
-    const index = this.planList.findIndex((plan) => plan.id === planId);
-    if (index === -1) {
-      return null;
-    }
-    const dayIndex = this.planList[index].plansOnDay.findIndex(
-      (day) => day.id === dayId,
-    );
-    if (dayIndex === -1) {
-      return null;
-    }
-    const removedDay = this.planList[index].plansOnDay.splice(dayIndex, 1);
-    return removedDay;
+  async deleteDayOnPlan(planId: string, dayId: string) {
+    return await prisma.plansOnDay.delete({
+      where: { id: dayId },
+    });
   }
 }
 
