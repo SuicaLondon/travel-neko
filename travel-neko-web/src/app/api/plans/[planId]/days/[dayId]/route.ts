@@ -9,7 +9,7 @@ export async function PUT(
 ) {
   const { planId, dayId } = params;
   const newDay: UpdateDayOnPlanModel = await request.json();
-  const updatedPlan = planManager.updateDayOnPlan(planId, dayId, newDay);
+  const updatedPlan = await planManager.updateDayOnPlan(planId, dayId, newDay);
   if (updatedPlan) {
     revalidatePath("/plans");
     revalidatePath(`/plans/${planId}`);
@@ -24,7 +24,7 @@ export async function DELETE(
   { params }: { params: { planId: string; dayId: string } },
 ) {
   const { planId, dayId } = params;
-  const deletedPlan = planManager.deleteDayOnPlan(planId, dayId);
+  const deletedPlan = await planManager.deleteDayOnPlan(planId, dayId);
   if (deletedPlan) {
     revalidatePath("/plans");
     revalidatePath(`/plans/${planId}`);
