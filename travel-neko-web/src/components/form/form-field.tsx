@@ -1,6 +1,7 @@
 import { HTMLInputTypeAttribute, memo } from "react";
 import { FieldError, FieldValues, Path, useFormContext } from "react-hook-form";
 import { FormError } from "./form-error";
+import clsx from "clsx";
 
 interface IFormFieldProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -12,6 +13,7 @@ interface IFormFieldProps<
   name: TName;
   error?: FieldError;
   valueAsNumber?: boolean;
+  disabled?: boolean;
 }
 export const FormField = memo(
   <Schema extends FieldValues>({
@@ -21,6 +23,7 @@ export const FormField = memo(
     name,
     error,
     valueAsNumber,
+    disabled,
   }: IFormFieldProps<Schema>) => {
     const { register } = useFormContext();
     const nameString = name.toString();
@@ -33,7 +36,11 @@ export const FormField = memo(
           {label}
         </label>
         <input
-          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          className={clsx(
+            "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500",
+            disabled ? "cursor-not-allowed bg-gray-100 dark:bg-gray-600" : "",
+          )}
+          disabled={disabled}
           id={nameString}
           type={type}
           placeholder={placeholder}

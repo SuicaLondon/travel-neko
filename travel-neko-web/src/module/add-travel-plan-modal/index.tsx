@@ -57,7 +57,7 @@ export function AddTravelPlanModal({
   } = methods;
   const queryClient = useQueryClient();
 
-  const { mutate: addPlan, isPending } = useAddPlanQuery({
+  const { mutate: addPlan, isPending: isAddingPlan } = useAddPlanQuery({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["fetch-plans"] });
       reset();
@@ -93,6 +93,7 @@ export function AddTravelPlanModal({
             label="Trip Title"
             name={"title"}
             error={errors["title"]}
+            disabled={isAddingPlan}
           />
           <Form.FormRadioGroup
             name="mapType"
@@ -101,14 +102,20 @@ export function AddTravelPlanModal({
               { label: "Apple Map", value: MapTypes.apple },
             ]}
             error={errors["mapType"]}
+            disabled={isAddingPlan}
           />
 
           <Form.FormImageField
             name={"coverImage"}
             error={errors["coverImage"]}
+            disabled={isAddingPlan}
           />
         </Modal.Body>
-        <Modal.Footer onSubmit={onClose} onClose={onClose} />
+        <Modal.Footer
+          disabled={isAddingPlan}
+          onSubmit={onClose}
+          onClose={onClose}
+        />
       </Form>
     </Modal>
   );
