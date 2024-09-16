@@ -36,7 +36,7 @@ class PlanManager {
       },
     });
 
-    await Promise.all(planList.map((plan) => this.cachePlan(plan)));
+    await Promise.all(planList.map((plan) => this.addPlanCache(plan)));
     return planList;
   }
 
@@ -59,7 +59,7 @@ class PlanManager {
     });
 
     if (plan) {
-      await this.cachePlan(plan);
+      await this.addPlanCache(plan);
     }
     return plan;
   }
@@ -81,7 +81,7 @@ class PlanManager {
       },
     });
     console.log(addedPlan);
-    await this.cachePlan(addedPlan);
+    await this.addPlanCache(addedPlan);
     return addedPlan;
   }
 
@@ -117,7 +117,11 @@ class PlanManager {
   }
 
   async addDayOnPlan(planId: string, day: AddDayOnPlanModel) {
-    return await prisma.plansOnDay.create({
+    const plan = await this.getPlan(planId);
+    if (!plan) {
+      return null;
+    }
+    const planOnDay = await prisma.plansOnDay.create({
       data: {
         ...day,
         travelPlanId: planId,
@@ -125,7 +129,15 @@ class PlanManager {
           create: [],
         },
       },
+      include: {
+        locations: true,
+      },
     });
+    if (plan && Array.isArray(plan.plansOnDay)) {
+      plan.plansOnDay.push(planOnDay);
+      await this.updatePlanCache(plan as TravelPlan);
+    }
+    return plan;
   }
 
   async updateDayOnPlan(
@@ -133,7 +145,11 @@ class PlanManager {
     dayId: string,
     day: UpdateDayOnPlanModel,
   ) {
-    return await prisma.plansOnDay.update({
+    const plan = await this.getPlan(planId);
+    if (!plan) {
+      return null;
+    }
+    const planOnDay = await prisma.plansOnDay.update({
       where: { id: dayId },
       data: {
         ...day,
@@ -142,15 +158,35 @@ class PlanManager {
         },
       },
     });
+    if (plan && Array.isArray(plan.plansOnDay)) {
+      const index = plan.plansOnDay.findIndex((day) => day.id === dayId);
+      if (index !== -1) {
+        plan.plansOnDay[index] = { ...plan.plansOnDay[index], ...planOnDay };
+        await this.updatePlanCache(plan as TravelPlan);
+      }
+    }
+    return plan;
   }
 
   async deleteDayOnPlan(planId: string, dayId: string) {
-    return await prisma.plansOnDay.delete({
+    const plan = await this.getPlan(planId);
+    if (!plan) {
+      return null;
+    }
+    const deletedDay = await prisma.plansOnDay.delete({
       where: { id: dayId },
     });
+    if (plan && Array.isArray(plan.plansOnDay)) {
+      const index = plan.plansOnDay.findIndex((day) => day.id === dayId);
+      if (index !== -1) {
+        plan.plansOnDay.splice(index, 1);
+        await this.updatePlanCache(plan as TravelPlan);
+      }
+    }
+    return plan;
   }
 
-  private async cachePlan(plan: TravelPlan) {
+  private async addPlanCache(plan: TravelPlan) {
     const convertedPlan = convertListToStringForObject(plan);
     return Promise.all([
       redis.zadd(PLAN_LIST_ID_SET_CACHE_KEY, Date.now(), plan.id),

@@ -40,20 +40,23 @@ export default function PlanDetail({ planId }: PlanDetailProps) {
       router.replace("/plans");
     },
   });
-  const { mutate: addDay } = useAddDayQuery(planId, {
+  const { mutate: addDay, isPending: isAddingDay } = useAddDayQuery(planId, {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["fetch-plan", planId] });
       refetchPlan();
     },
   });
-  const { mutate: deleteDay } = useDeleteDayQuery(planId, {
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["fetch-plan", planId] });
-      refetchPlan();
-      setIsDeleteDayModalOpened(false);
-      setSelectedDayId(null);
+  const { mutate: deleteDay, isPending: isDeletingDay } = useDeleteDayQuery(
+    planId,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["fetch-plan", planId] });
+        refetchPlan();
+        setIsDeleteDayModalOpened(false);
+        setSelectedDayId(null);
+      },
     },
-  });
+  );
   const [isDeleteModalOpened, setIsDeleteModalOpened] = useState(false);
   const [isDeleteDayModalOpened, setIsDeleteDayModalOpened] = useState(false);
   const [selectedDayId, setSelectedDayId] = useState<string | null>(null);
@@ -107,6 +110,8 @@ export default function PlanDetail({ planId }: PlanDetailProps) {
     redirect("/plans");
   }
 
+  const isDisabled = isAddingDay || isDeletingPlan || isDeletingDay;
+
   return (
     <div>
       <PlanCover title={plan.title} coverImage={plan.coverImage} />
@@ -127,16 +132,26 @@ export default function PlanDetail({ planId }: PlanDetailProps) {
               );
             })}
             <DeleteButton
+              disabled={isDisabled}
               label="Delete Day"
               onClick={() => handleDeleteDayModalOpen(planOnDay.id)}
             />
           </div>
         );
       })}
-      <AddButton label="Add Day on Plan" onClick={addDayOnPlan} />
-      <DeleteButton label="Delete Plan" onClick={handleDeleteModalOpen} />
+      <AddButton
+        disabled={isDisabled}
+        label="Add Day on Plan"
+        onClick={addDayOnPlan}
+      />
+      <DeleteButton
+        disabled={isDisabled}
+        label="Delete Plan"
+        onClick={handleDeleteModalOpen}
+      />
 
       <ConfirmModal
+        disabled={isDeletingPlan}
         isOpened={isDeleteModalOpened}
         onClose={handleDeleteModalClose}
         onConfirm={handleDeletePlan}
@@ -144,6 +159,7 @@ export default function PlanDetail({ planId }: PlanDetailProps) {
         content="Are you sure you want to delete this travel plan?"
       />
       <ConfirmModal
+        disabled={isDeletingDay}
         isOpened={isDeleteDayModalOpened}
         onClose={handleDeleteDayModalClose}
         onConfirm={handleDeleteDayPlan}

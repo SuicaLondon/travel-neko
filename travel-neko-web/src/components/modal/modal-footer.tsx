@@ -1,8 +1,10 @@
 import React from "react";
+import clsx from "clsx";
 
 type ModalFooter = {
   confirmLabel?: string;
   closeLabel?: string;
+  disabled?: boolean;
   onConfirm?: () => void;
   onSubmit?: () => void;
   onClose?: () => void;
@@ -11,6 +13,7 @@ type ModalFooter = {
 export default function ModalFooter({
   confirmLabel = "Confirm",
   closeLabel = "Close",
+  disabled,
   onConfirm,
   onSubmit,
   onClose,
@@ -20,7 +23,10 @@ export default function ModalFooter({
       {(onConfirm || onSubmit) && (
         <button
           type={!!onSubmit ? "submit" : "button"}
-          className="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          className={clsx(
+            "rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800",
+            disabled ? "cursor-not-allowed bg-gray-100 dark:bg-gray-600" : "",
+          )}
           onClick={onConfirm}
         >
           {confirmLabel}

@@ -1,6 +1,8 @@
 import { tryJsonParse } from "./json-utils";
 
-export const convertListToStringForObject = (object: object): object => {
+export const convertListToStringForObject = <T extends object>(
+  object: T,
+): T => {
   return Object.fromEntries(
     Object.entries(object).map(([key, value]) => {
       if (Array.isArray(value)) {
@@ -11,13 +13,15 @@ export const convertListToStringForObject = (object: object): object => {
       }
       return [key, value];
     }),
-  );
+  ) as T;
 };
 
-export const convertStringToObjectForList = (object: object): object => {
+export const convertStringToObjectForList = <T extends object>(
+  object: T,
+): T => {
   return Object.fromEntries(
     Object.entries(object).map(([key, value]) => {
       return [key, tryJsonParse(value)];
     }),
-  );
+  ) as T;
 };

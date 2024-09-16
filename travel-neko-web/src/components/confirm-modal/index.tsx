@@ -7,6 +7,7 @@ type ConfirmModalProps = {
   onConfirm: () => void;
   title: string;
   content: string;
+  disabled?: boolean;
 };
 
 export const ConfirmModal = memo(function ConfirmModal({
@@ -15,12 +16,17 @@ export const ConfirmModal = memo(function ConfirmModal({
   title,
   content,
   onConfirm,
+  disabled,
 }: ConfirmModalProps) {
   return (
     <Modal isOpened={isOpened} onClose={onClose}>
       <Modal.Header title={title} onClose={onClose} />
       <Modal.Body>{content}</Modal.Body>
-      <Modal.Footer onConfirm={onConfirm} onClose={onClose} />
+      <Modal.Footer
+        disabled={disabled}
+        onConfirm={onConfirm}
+        onClose={onClose}
+      />
     </Modal>
   );
 });

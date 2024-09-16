@@ -12,10 +12,11 @@ type FormRadioGroupProps = {
   name: string;
   configs: FormRadioGroupConfig[];
   error?: FieldError;
+  disabled?: boolean;
 };
 
 export const FormRadioGroup = memo(
-  ({ name, configs, error }: FormRadioGroupProps) => {
+  ({ name, configs, error, disabled }: FormRadioGroupProps) => {
     return (
       <>
         <div className="flex space-x-4">
@@ -26,6 +27,7 @@ export const FormRadioGroup = memo(
                 label={config.label}
                 name={name}
                 value={config.value}
+                disabled={disabled}
               />
             );
           })}

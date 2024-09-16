@@ -1,6 +1,7 @@
 import { HTMLInputTypeAttribute, memo } from "react";
 import { FieldError, FieldValues, Path, useFormContext } from "react-hook-form";
 import { FormError } from "./form-error";
+import clsx from "clsx";
 
 interface IFormFileFieldProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -10,6 +11,7 @@ interface IFormFileFieldProps<
   label: string;
   name: TName;
   error?: FieldError;
+  disabled?: boolean;
 }
 export const FormFileField = memo(
   <Schema extends FieldValues>({
@@ -17,6 +19,7 @@ export const FormFileField = memo(
     label,
     name,
     error,
+    disabled,
   }: IFormFileFieldProps<Schema>) => {
     const { register } = useFormContext();
     const nameString = name.toString();
@@ -30,10 +33,14 @@ export const FormFileField = memo(
         </label>
         <input
           type="file"
-          className="block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400"
+          className={clsx(
+            "block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400",
+            disabled ? "cursor-not-allowed bg-gray-100 dark:bg-gray-600" : "",
+          )}
           id={nameString}
           placeholder={placeholder}
           {...register(name)}
+          disabled={disabled}
         />
         <FormError message={error?.message} />
       </>
