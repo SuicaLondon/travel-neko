@@ -1,27 +1,12 @@
-"use client";
-import { useFetchPlanListQuery } from "@/hooks/use-fetch-plan-list-query";
-import { AddTravelPlanModal } from "@/module/add-travel-plan-modal";
+import { ITravelPlan } from "@/models/plan-model";
 import Link from "next/link";
-import { useCallback, useState } from "react";
-import { AddButton } from "../button/add-button";
 
-export function PlanList() {
-  const { data: planList, error, isLoading } = useFetchPlanListQuery();
-  const [isOpened, setIsOpened] = useState(false);
-
-  const onAddButtonClick = useCallback(() => {
-    setIsOpened(true);
-  }, []);
-  const onModalClose = useCallback(() => {
-    setIsOpened(false);
-  }, []);
-
-  if (isLoading) {
+export function PlanListComponent({ planList }: { planList?: ITravelPlan[] }) {
+  if (planList === undefined) {
     return <div>Loading</div>;
   }
-
   return (
-    <div>
+    <>
       {planList?.map((plan) => {
         return (
           <Link
@@ -42,8 +27,6 @@ export function PlanList() {
           </Link>
         );
       })}
-      <AddButton label="Add Plan" onClick={onAddButtonClick} />
-      <AddTravelPlanModal isOpened={isOpened} onModalClose={onModalClose} />
-    </div>
+    </>
   );
 }

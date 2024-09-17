@@ -1,7 +1,9 @@
+import { prefetchPlanQuery } from "@/actions/prefetch-plan-query";
 import PlanDetail from "@/module/plan-detail";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import React from "react";
 
-export default function PlanPage({
+export default async function PlanPage({
   params,
   searchParams,
 }: {
@@ -9,5 +11,10 @@ export default function PlanPage({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const { planId } = params;
-  return <PlanDetail planId={decodeURIComponent(planId)} />;
+  const queryClient = await prefetchPlanQuery(planId);
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <PlanDetail planId={decodeURIComponent(planId)} />
+    </HydrationBoundary>
+  );
 }

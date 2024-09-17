@@ -4,6 +4,7 @@ import {
   ACCEPTED_IMAGE_TYPES,
   MAX_FILE_SIZE,
 } from "@/constants/file-constants";
+import { FETCH_PLAN_LIST_QUERY_KEY } from "@/constants/query-constants";
 import { useAddPlanQuery } from "@/hooks/use-add-plan-query";
 import { useFormErrorToast } from "@/hooks/use-form-error-toast";
 import { useUnmount } from "@/hooks/use-unmount";
@@ -59,7 +60,7 @@ export function AddTravelPlanModal({
 
   const { mutate: addPlan, isPending: isAddingPlan } = useAddPlanQuery({
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["fetch-plans"] });
+      queryClient.invalidateQueries({ queryKey: FETCH_PLAN_LIST_QUERY_KEY });
       reset();
       onModalClose();
     },

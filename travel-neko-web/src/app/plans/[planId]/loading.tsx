@@ -1,5 +1,5 @@
 import React from "react";
 
 export default function PlanDetailLoading() {
-  return <div>Loading</div>;
+  return <div>Plan DetailLoading</div>;
 }

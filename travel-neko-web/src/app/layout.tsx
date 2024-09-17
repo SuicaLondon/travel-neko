@@ -45,9 +45,7 @@ export default function RootLayout({
               </Sidebar.Item>
             </Sidebar.Items>
           </Sidebar>
-          <div className="min-h-screen p-4 sm:ml-64">
-            <PlanStoreProvider>{children}</PlanStoreProvider>
-          </div>
+          <div className="min-h-screen p-4 sm:ml-64">{children}</div>
         </ReactQueryClientProvider>
       </body>
     </html>
