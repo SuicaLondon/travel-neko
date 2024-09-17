@@ -1,16 +1,14 @@
 "use client";
-import { deleteDayOnPlan } from "@/clients/day-of-plan";
 import { AddButton } from "@/components/button/add-button";
 import { DeleteButton } from "@/components/button/delete-button";
 import { ConfirmModal } from "@/components/confirm-modal";
 import { PlanCover } from "@/components/plan-cover";
+import { FETCH_PLAN_LIST_QUERY_KEY } from "@/constants/query-constants";
 import { useAddDayQuery } from "@/hooks/use-add-day-query";
 import { useDeleteDayQuery } from "@/hooks/use-delete-day-query";
 import { useDeletePlanQuery } from "@/hooks/use-delete-plan-query";
 import { useFetchPlanQuery } from "@/hooks/use-fetch-plan-query";
-import { ITravelPlan } from "@/models/plan-model";
 import { useQueryClient } from "@tanstack/react-query";
-import { revalidatePath } from "next/cache";
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -36,7 +34,7 @@ export default function PlanDetail({ planId }: PlanDetailProps) {
   } = useDeletePlanQuery({
     onSuccess: () => {
       setIsDeleteModalOpened(false);
-      queryClient.invalidateQueries({ queryKey: ["fetch-plans"] });
+      queryClient.invalidateQueries({ queryKey: FETCH_PLAN_LIST_QUERY_KEY });
       router.replace("/plans");
     },
   });
