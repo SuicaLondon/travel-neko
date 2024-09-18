@@ -31,6 +31,6 @@ body {
     text-wrap: balance;
   }
   .bg-placeholder {
-    @apply animate-pulse bg-gray-500;
+    @apply animate-pulse rounded-xl bg-gray-500;
   }
 }
