@@ -111,7 +111,7 @@ export default function PlanDetail({ planId }: PlanDetailProps) {
   const isDisabled = isAddingDay || isDeletingPlan || isDeletingDay;
 
   return (
-    <div>
+    <div className="flex flex-col space-y-4">
       <PlanCover title={plan.title} coverImage={plan.coverImage} />
       {plan.plansOnDay.map((planOnDay) => {
         return (
