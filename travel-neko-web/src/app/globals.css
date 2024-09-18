@@ -30,4 +30,7 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .bg-placeholder {
+    @apply animate-pulse bg-gray-500;
+  }
 }
