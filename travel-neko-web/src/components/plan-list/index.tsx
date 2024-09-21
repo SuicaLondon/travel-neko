@@ -14,11 +14,13 @@ export function PlanListComponent({ planList }: { planList?: ITravelPlan[] }) {
             href={`/plans/${plan.id}`}
             className="cursor-pointer"
           >
-            <div className="max-h-80 w-full max-w-96">
-              <h1 className="text-4xl font-bold">{plan.title}</h1>
+            <div className="relative max-h-80 w-full overflow-clip rounded-2xl">
+              <h1 className="absolute bottom-4 left-4 text-6xl font-bold text-outline-black">
+                {plan.title}
+              </h1>
               {plan.coverImage && (
                 <img
-                  className="flex w-full items-center justify-center"
+                  className="flex max-h-80 w-full items-center justify-center"
                   src={plan.coverImage}
                   alt="Uploaded Image"
                 />
