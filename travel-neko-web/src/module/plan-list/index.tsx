@@ -21,7 +21,7 @@ export function PlanList() {
   }
 
   return (
-    <div>
+    <div className="flex w-full flex-col space-y-4">
       <PlanListComponent planList={planList} />
       <AddButton label="Add Plan" onClick={onAddButtonClick} />
       <AddTravelPlanModal isOpened={isOpened} onModalClose={onModalClose} />
