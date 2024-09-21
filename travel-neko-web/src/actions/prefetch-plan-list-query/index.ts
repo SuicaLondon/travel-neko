@@ -9,13 +9,8 @@ export const prefetchPlanListQuery = async () => {
     await queryClient.prefetchQuery<ITravelPlan[]>({
       queryKey: FETCH_PLAN_LIST_QUERY_KEY,
       queryFn: async () => {
-        try {
-          const planList = await fetchPlanList();
-          return planList;
-        } catch (error) {
-          console.error("Error fetching plan list", error);
-          throw error;
-        }
+        const planList = await fetchPlanList();
+        return planList;
       },
     });
   } catch (error) {
