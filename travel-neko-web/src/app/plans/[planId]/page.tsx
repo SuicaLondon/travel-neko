@@ -1,5 +1,5 @@
 import { prefetchPlanQuery } from "@/actions/prefetch-plan-query";
-import PlanDetail from "@/module/plan-detail";
+import PlanDetail from "@/modules/plan-detail";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export default async function PlanPage({

@@ -1,7 +1,7 @@
 "use client";
 import { PlanListComponent } from "@/components/plan-list";
 import { useFetchPlanListQuery } from "@/hooks/use-fetch-plan-list-query";
-import { AddTravelPlanModal } from "@/module/add-travel-plan-modal";
+import { AddTravelPlanModal } from "@/modules/add-travel-plan-modal";
 import { useCallback, useState } from "react";
 import { AddButton } from "@/components/button/add-button";
 
@@ -21,7 +21,7 @@ export function PlanList() {
   }
 
   return (
-    <div className="flex w-full flex-col space-y-4">
+    <div className="flex flex-col space-y-4">
       <PlanListComponent planList={planList} />
       <AddButton label="Add Plan" onClick={onAddButtonClick} />
       <AddTravelPlanModal isOpened={isOpened} onModalClose={onModalClose} />

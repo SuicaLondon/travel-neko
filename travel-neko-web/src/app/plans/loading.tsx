@@ -1,4 +1,4 @@
-import PlanListLoading from "@/module/plan-list-loading";
+import PlanListLoading from "@/modules/plan-list-loading";
 
 export default function PlansLoading() {
   return <PlanListLoading />;
