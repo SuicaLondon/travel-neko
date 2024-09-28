@@ -4,6 +4,7 @@ import { useFetchPlanListQuery } from "@/hooks/use-fetch-plan-list-query";
 import { AddTravelPlanModal } from "@/modules/add-travel-plan-modal";
 import { useCallback, useState } from "react";
 import { AddButton } from "@/components/button/add-button";
+import PlansLoading from "@/app/plans/loading";
 
 export function PlanList() {
   const { data: planList, error, isLoading } = useFetchPlanListQuery();
@@ -17,7 +18,7 @@ export function PlanList() {
   }, []);
 
   if (isLoading) {
-    return <div>Loading</div>;
+    return <PlansLoading />;
   }
 
   return (
