@@ -1,0 +1,25 @@
+### Register
+POST http://127.0.0.1:8000/api/user/register/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "testuser3",
+    "password": "testpassword"
+}
+
+### Login
+POST http://127.0.0.1:8000/api/user/login/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "testuser3",
+    "password": "testpassword"
+}
+
+### Refresh
+POST http://127.0.0.1:8000/api/user/refresh/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI5NjQzMDA1LCJpYXQiOjE3Mjk2NDEyMDUsImp0aSI6IjE4ZTEwZTYzYWQzNzQyZDRiNzFlYmExODQwNzZkMDdjIiwidXNlcl9pZCI6NX0.1SlOaPVdyn5Z7N4OWCVzhuBNDIIBAtYEkJw15FgrEDM"
+}

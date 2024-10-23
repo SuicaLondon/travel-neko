@@ -1,0 +1,8 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI5NjQzMDE4LCJpYXQiOjE3Mjk2NDEyMTgsImp0aSI6IjQ4MmQ5ZDFiNzUzNTQyMWVhZGFjMzg2OTliMzFkZGEyIiwidXNlcl9pZCI6NX0.IKXPFr-1rbbbtumEdsPTlCh1UhpAbU3IaZwKlUB6qNQ
+### Get All Plans
+GET http://127.0.0.1:8000/api/plans/ HTTP/1.1
+Authorization: Bearer {{token}}
+
+### Delete Plan
+DELETE http://127.0.0.1:8000/api/plans/1/ HTTP/1.1
+Authorization: Bearer {{token}}
