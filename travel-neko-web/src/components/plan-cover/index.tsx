@@ -3,14 +3,19 @@ import React, { memo } from "react";
 type PlanCoverProps = {
   coverImage?: string;
   title: string;
+  onClick?: () => void;
 };
 
 export const PlanCover = memo(function PlanCover({
   coverImage,
   title,
+  onClick,
 }: PlanCoverProps) {
   return (
-    <div className="relative max-h-96 max-w-full overflow-clip">
+    <div
+      className="relative max-h-96 max-w-full overflow-clip"
+      onClick={onClick}
+    >
       {coverImage && (
         <img
           className="flex w-full items-center justify-center"

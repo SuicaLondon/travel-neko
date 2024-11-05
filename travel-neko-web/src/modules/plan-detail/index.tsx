@@ -12,6 +12,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { UpdateTravelPlanModal } from "../update-travel-plan-modal";
 type PlanDetailProps = {
   planId: string;
 };
@@ -57,6 +58,7 @@ export default function PlanDetail({ planId }: PlanDetailProps) {
   );
   const [isDeleteModalOpened, setIsDeleteModalOpened] = useState(false);
   const [isDeleteDayModalOpened, setIsDeleteDayModalOpened] = useState(false);
+  const [isUpdateModalOpened, setIsUpdateModalOpened] = useState(false);
   const [selectedDayId, setSelectedDayId] = useState<string | null>(null);
 
   const handleDeleteDayModalOpen = (dayId: string) => {
@@ -77,6 +79,13 @@ export default function PlanDetail({ planId }: PlanDetailProps) {
   const addDayOnPlan = () => {
     if (!plan) return;
     addDay({ numOfDay: plan.plansOnDay.length + 1, locations: [] });
+  };
+
+  const handleUpdateModalOpen = () => {
+    setIsUpdateModalOpened(true);
+  };
+  const handleUpdateModalClose = () => {
+    setIsUpdateModalOpened(false);
   };
 
   const handleDeleteModalOpen = () => {
@@ -112,7 +121,11 @@ export default function PlanDetail({ planId }: PlanDetailProps) {
 
   return (
     <div className="flex flex-col space-y-4">
-      <PlanCover title={plan.title} coverImage={plan.coverImage} />
+      <PlanCover
+        title={plan.title}
+        coverImage={plan.coverImage}
+        onClick={handleUpdateModalOpen}
+      />
       {plan.plansOnDay.map((planOnDay) => {
         return (
           <div key={planOnDay.id} className="flex justify-between gap-4">
@@ -163,6 +176,12 @@ export default function PlanDetail({ planId }: PlanDetailProps) {
         onConfirm={handleDeleteDayPlan}
         title="Delete Travel Day"
         content="Are you sure you want to delete this travel day?"
+      />
+      <UpdateTravelPlanModal
+        planId={planId}
+        plan={plan}
+        isOpened={isUpdateModalOpened}
+        onModalClose={handleUpdateModalClose}
       />
     </div>
   );
