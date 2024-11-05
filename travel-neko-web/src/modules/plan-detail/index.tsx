@@ -78,7 +78,8 @@ export default function PlanDetail({ planId }: PlanDetailProps) {
 
   const addDayOnPlan = () => {
     if (!plan) return;
-    addDay({ numOfDay: plan.plansOnDay.length + 1, locations: [] });
+    const lastPlanOnDay = plan.plansOnDay[plan.plansOnDay.length - 1];
+    addDay({ numOfDay: lastPlanOnDay.numOfDay + 1, locations: [] });
   };
 
   const handleUpdateModalOpen = () => {
