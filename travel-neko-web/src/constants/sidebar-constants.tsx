@@ -12,7 +12,7 @@ export const SIDEBAR_CONFIGS = [
     id: 0,
     label: "Plans",
     content: "Travel Plans",
-    href: "/plan",
+    href: "/plans",
     icon: (
       <svg
         className="h-5 w-5 flex-shrink-0 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
