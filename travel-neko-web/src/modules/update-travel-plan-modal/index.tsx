@@ -4,7 +4,10 @@ import {
   ACCEPTED_IMAGE_TYPES,
   MAX_FILE_SIZE,
 } from "@/constants/file-constants";
-import { FETCH_PLAN_LIST_QUERY_KEY } from "@/constants/query-constants";
+import {
+  FETCH_PLAN_LIST_QUERY_KEY,
+  FETCH_PLAN_QUERY_KEY,
+} from "@/constants/query-constants";
 import { useFormErrorToast } from "@/hooks/use-form-error-toast";
 import { useUnmount } from "@/hooks/use-unmount";
 import { useUpdatePlanQuery } from "@/hooks/use-update-plan-query";
@@ -69,7 +72,9 @@ export function UpdateTravelPlanModal({
     planId,
     {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: FETCH_PLAN_LIST_QUERY_KEY });
+        queryClient.invalidateQueries({
+          queryKey: [FETCH_PLAN_QUERY_KEY, planId] as const,
+        });
         reset();
         onModalClose();
       },
